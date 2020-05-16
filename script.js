@@ -61,13 +61,21 @@ function goToSlide (newIndex) {
 
   if (state.isLast) container.classList.add('is-last')
   else container.classList.remove('is-last')
+}
+
+//#region Autoplay
+const autoplay = setInterval(nextSlide, 3000)
+
+function handleFirstUserInteraction () {
+  container.removeEventListener('touchstart', handleFirstUserInteraction)
+  container.removeEventListener('mousedown', handleFirstUserInteraction)
 
   // Stop autoplay
   clearInterval(autoplay)
 }
 
-//#region Autoplay
-const autoplay = setInterval(nextSlide, 3000)
+container.addEventListener('touchstart', handleFirstUserInteraction)
+container.addEventListener('mousedown', handleFirstUserInteraction)
 //#endregion Autoplay
 
 //#region Pagination
@@ -87,9 +95,8 @@ const handleScrollToUpdatePagination = debounce(() => {
   Array.from(pagination.children).forEach(dot => dot.classList.remove('current'))
 
   const newIndexFromScrollPosition = Math.round(scroller.scrollLeft / scroller.clientWidth)
-  // pagination.children[newIndexFromScrollPosition].classList.add('current')
   goToSlide(newIndexFromScrollPosition)
-})
+}, 100)
 
 scroller.addEventListener('scroll', handleScrollToUpdatePagination, {
   passive: true
