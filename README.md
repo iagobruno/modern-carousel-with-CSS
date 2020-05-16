@@ -6,11 +6,11 @@ A touch and keyboard friendly slideshow made with [CSS scroll snap](https://deve
 
 ## Features
 
-- ✅ Gesture navigation.
-- ✅ Keyboard navigation.
-- ✅ Paging navigation.
+- ✅ Touch support.
+- ✅ Keyboard support.
+- ✅ Paging indicator.
 - ✅ Navigation with next and previous buttons.
-- ✅ Mousewheel navigation.
+- ✅ Mousewheel support.
 - ✅ Auto play.
 
 ## Browser support
