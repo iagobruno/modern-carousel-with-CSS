@@ -18,8 +18,8 @@ function init () {
     total: slides.length,
   }
 
-  loopSlidesAndAddDotPagination()
-  handleScrollToUpdatePagination()
+  updateNumberOfDotsInPaging()
+  handleScrollToUpdateState()
 
   goToSlide(state.activeIndex)
 }
@@ -38,12 +38,12 @@ function nextSlide () {
   goToSlide(newIndex)
 }
 
-function goToSlide (newIndex) {
+function goToSlide (index) {
   slides[state.activeIndex].classList.remove('current')
   pagination.children[state.activeIndex].classList.remove('current')
 
 
-  state.activeIndex = newIndex
+  state.activeIndex = index
   state.isFirst = state.activeIndex === 0
   state.isLast = state.activeIndex >= state.total-1
 
@@ -79,7 +79,7 @@ container.addEventListener('mousedown', handleFirstUserInteraction)
 //#endregion Autoplay
 
 //#region Pagination
-function loopSlidesAndAddDotPagination () {
+function updateNumberOfDotsInPaging () {
   pagination.innerHTML = ''
 
   slides.forEach((slide, index) => {
@@ -91,14 +91,14 @@ function loopSlidesAndAddDotPagination () {
   })
 }
 
-const handleScrollToUpdatePagination = debounce(() => {
+const handleScrollToUpdateState = debounce(() => {
   Array.from(pagination.children).forEach(dot => dot.classList.remove('current'))
 
   const newIndexFromScrollPosition = Math.round(scroller.scrollLeft / scroller.clientWidth)
   goToSlide(newIndexFromScrollPosition)
 }, 100)
 
-scroller.addEventListener('scroll', handleScrollToUpdatePagination, {
+scroller.addEventListener('scroll', handleScrollToUpdateState, {
   passive: true
 })
 //#endregion Pagination
@@ -110,13 +110,16 @@ container.querySelector('.next-button').addEventListener('click', nextSlide)
 
 //#region Keyboard navigation
 window.addEventListener('keydown', event => {
-  if (event.key === 'ArrowLeft') event.preventDefault(), prevSlide()
-  if (event.key === 'ArrowRight') event.preventDefault(), nextSlide()
+  if (event.key === 'ArrowLeft') {
+    event.preventDefault()
+    prevSlide()
+  }
+  if (event.key === 'ArrowRight') {
+    event.preventDefault()
+    nextSlide()
+  }
 })
 //#endregion Keyboard navigation
-
-
-
 
 // INIT HERE!
 init()
@@ -125,7 +128,7 @@ init()
 new MutationObserver((mutations) => {
   mutations.forEach((mutation) => {
     if (mutation.type === 'childList' && (mutation.removedNodes || mutation.addedNodes)) {
-      console.log('REINIT!')
+      // console.log('REINIT!')
       init()
     }
   })
